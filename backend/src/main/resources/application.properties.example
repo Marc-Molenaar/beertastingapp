@@ -1,0 +1,20 @@
+spring.datasource.url=jdbc:postgresql://localhost:5432/your_db_name
+spring.datasource.username=
+spring.datasource.password=
+
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
+# Hibernate ddl auto (create, create-drop, validate, update)
+spring.jpa.hibernate.ddl-auto = create-drop
+
+server.error.include-message=always
+server.port=6969
+server.servlet.context-path=/api
+jwt.secret=
+jwt.expiration=3600000
+
+spring.mail.host=
+spring.mail.port=
+spring.mail.username=
+spring.mail.password=
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
