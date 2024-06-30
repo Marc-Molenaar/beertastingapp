@@ -1,7 +1,7 @@
 package com.sjoerd69.beertastingapp.controller;
 
 import com.sjoerd69.beertastingapp.config.JWTUtil;
-import com.sjoerd69.beertastingapp.dao.UserRepository;
+import com.sjoerd69.beertastingapp.repositories.UserRepository;
 import com.sjoerd69.beertastingapp.dto.AuthenticationDTO;
 import com.sjoerd69.beertastingapp.dto.LoginResponse;
 import com.sjoerd69.beertastingapp.models.CustomUser;

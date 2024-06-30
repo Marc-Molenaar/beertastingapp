@@ -14,6 +14,7 @@ public class Player {
     private Long id;
 
     @ManyToOne
+    @JsonBackReference
     private Lobby lobby;
 
     @ManyToOne

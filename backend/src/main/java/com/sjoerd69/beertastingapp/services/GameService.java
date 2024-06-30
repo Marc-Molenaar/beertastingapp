@@ -1,7 +1,9 @@
 package com.sjoerd69.beertastingapp.services;
 
 import com.sjoerd69.beertastingapp.dao.GameDAO;
-import com.sjoerd69.beertastingapp.dao.UserRepository;
+import com.sjoerd69.beertastingapp.models.Lobby;
+import com.sjoerd69.beertastingapp.models.enums.GameStatus;
+import com.sjoerd69.beertastingapp.repositories.UserRepository;
 import com.sjoerd69.beertastingapp.dto.GameDTO;
 import com.sjoerd69.beertastingapp.models.CustomUser;
 import com.sjoerd69.beertastingapp.models.Game;
@@ -17,11 +19,13 @@ import java.util.Optional;
 public class GameService {
 
     private final GameDAO gameDAO;
-    private final UserRepository userRepository;
+    private final UserService userService;
+    private final LobbyService lobbyService;
 
-    public GameService(GameDAO gameDAO, UserRepository userRepository) {
+    public GameService(GameDAO gameDAO, UserService userService, LobbyService lobbyService) {
         this.gameDAO = gameDAO;
-        this.userRepository = userRepository;
+        this.userService = userService;
+        this.lobbyService = lobbyService;
     }
 
     public List<Game> getAllGames() {
@@ -29,16 +33,10 @@ public class GameService {
     }
 
     @Transactional
-    public void createGame(GameDTO gameDTO) {
-        Optional<CustomUser> user = this.userRepository.findById(gameDTO.ownerId);
+    public void createGame(GameDTO gameDTO, String bearerToken) {
+        CustomUser user = this.userService.getUserByBearerToken(bearerToken);
 
-        if(user.isEmpty()) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "User not found"
-            );
-        }
-
-        Game game = new Game(gameDTO.name, gameDTO.description, user.get(), gameDTO.status);
+        Game game = new Game(gameDTO.getName(), gameDTO.getDescription(), user, gameDTO.getStatus());
         this.gameDAO.saveGame(game);
     }
 
@@ -47,9 +45,9 @@ public class GameService {
 
         if (gameOptional.isPresent()) {
             Game game = gameOptional.get();
-            game.setName(gameDTO.name);
-            game.setDescription(gameDTO.description);
-            game.setStatus(gameDTO.status);
+            game.setName(gameDTO.getName());
+            game.setDescription(gameDTO.getDescription());
+            game.setStatus(gameDTO.getStatus());
 
             this.gameDAO.saveGame(game);
         } else {
@@ -81,5 +79,17 @@ public class GameService {
                     HttpStatus.NOT_FOUND, "No game found with that id"
             );
         }
+    }
+
+    public Lobby startGame(Long id) {
+        Optional<Game> game = this.gameDAO.findGameById(id);
+
+        if (game.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "No game found with that id"
+            );
+        }
+
+        return this.lobbyService.createLobby(game.get());
     }
 }

@@ -1,7 +1,7 @@
 package com.sjoerd69.beertastingapp.services;
 
 import com.sjoerd69.beertastingapp.config.JWTUtil;
-import com.sjoerd69.beertastingapp.dao.UserRepository;
+import com.sjoerd69.beertastingapp.repositories.UserRepository;
 import com.sjoerd69.beertastingapp.models.CustomUser;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -45,5 +45,10 @@ public class UserService implements UserDetailsService {
         }
 
         return user.getRole().equals("ROLE_ADMIN");
+    }
+
+    public CustomUser getUserByBearerToken(String bearerToken) {
+        String email = jwtUtil.validateTokenAndRetrieveSubject(bearerToken.substring(7));
+        return userDAO.findByEmail(email);
     }
 }

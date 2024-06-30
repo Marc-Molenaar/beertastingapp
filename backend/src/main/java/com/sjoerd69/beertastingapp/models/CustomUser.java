@@ -12,9 +12,12 @@ import java.util.Set;
 public class CustomUser {
     @Id
     @GeneratedValue
+    @JsonIgnore
     private Long id;
 
     private String name;
+
+    @JsonIgnore
     private String email;
 
     @OneToMany(mappedBy = "user")
@@ -27,6 +30,8 @@ public class CustomUser {
 
     @JsonIgnore
     private String password;
+
+    @JsonIgnore
     private String role = "ROLE_USER";
 
     public CustomUser() {

@@ -1,6 +1,7 @@
 package com.sjoerd69.beertastingapp.dao;
 
 import com.sjoerd69.beertastingapp.models.Game;
+import com.sjoerd69.beertastingapp.repositories.GameRepository;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;

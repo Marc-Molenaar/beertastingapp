@@ -32,15 +32,16 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-//                .cors(Customizer.withDefaults())
+                .cors(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .userDetailsService(userService)
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/products/**").permitAll()
+                        .requestMatchers("/lobbies/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/categories").permitAll()
+                        .requestMatchers("/games").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/error").anonymous()
                         .anyRequest().authenticated()
                 )
@@ -57,6 +58,3 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }
-
-
-

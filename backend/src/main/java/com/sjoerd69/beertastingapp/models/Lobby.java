@@ -1,6 +1,7 @@
 package com.sjoerd69.beertastingapp.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sjoerd69.beertastingapp.models.enums.LobbyStatus;
 import jakarta.persistence.*;
 
@@ -29,15 +30,15 @@ public class Lobby {
     @ManyToOne
     private Game game;
 
-    @OneToMany(mappedBy = "lobby")
-    @JsonBackReference
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lobby")
+    @JsonManagedReference
     private List<Player> players;
 
-    @OneToMany(mappedBy = "lobby")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lobby")
     @JsonBackReference
     private List<Result> results;
 
-    @OneToMany(mappedBy = "lobby")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lobby")
     @JsonBackReference
     private List<Answer> answers;
 

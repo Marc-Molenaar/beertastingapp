@@ -1,6 +1,6 @@
 package com.sjoerd69.beertastingapp.models.enums;
 
-public enum Status {
+public enum GameStatus {
     PUBLIC,
     PRIVATE
 }

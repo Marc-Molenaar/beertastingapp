@@ -1,7 +1,8 @@
 package com.sjoerd69.beertastingapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.sjoerd69.beertastingapp.models.enums.Status;
+import com.sjoerd69.beertastingapp.models.enums.GameStatus;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -16,27 +17,28 @@ public class Game {
     private String description;
 
     @ManyToOne
+    @JsonIgnore
     private CustomUser owner;
 
     @OneToMany
-    @JsonManagedReference
+    @JsonIgnore
     private Set<Lobby> lobbies;
 
     @OneToMany
-    @JsonManagedReference
+    @JsonIgnore
     private Set<Screen> screens;
 
     @OneToMany
-    @JsonManagedReference
+    @JsonIgnore
     private Set<Flow> flows;
 
-    private Enum<Status> status;
+    private Enum<GameStatus> status;
 
 
     public Game() {
     }
 
-    public Game(String name, String description, CustomUser owner, Enum<Status> status) {
+    public Game(String name, String description, CustomUser owner, Enum<GameStatus> status) {
         this.name = name;
         this.owner = owner;
         this.description = description;
@@ -75,11 +77,11 @@ public class Game {
         this.owner = owner;
     }
 
-    public Enum<Status> getStatus() {
+    public Enum<GameStatus> getStatus() {
         return status;
     }
 
-    public void setStatus(Enum<Status> status) {
+    public void setStatus(Enum<GameStatus> status) {
         this.status = status;
     }
 

@@ -2,6 +2,7 @@ package com.sjoerd69.beertastingapp.controller;
 
 import com.sjoerd69.beertastingapp.dto.GameDTO;
 import com.sjoerd69.beertastingapp.models.Game;
+import com.sjoerd69.beertastingapp.models.Lobby;
 import com.sjoerd69.beertastingapp.services.GameService;
 import com.sjoerd69.beertastingapp.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -43,11 +44,23 @@ public class GameController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Forbidden");
         }
 
-        this.gameService.createGame(gameDTO);
+        this.gameService.createGame(gameDTO, bearerToken);
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Game created");
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{id}/start")
+    public ResponseEntity<Lobby> startGame(@PathVariable Long id,
+                                                         @RequestHeader("Authorization") String bearerToken){
+        if(!this.userService.authorizeAdmin(bearerToken)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Forbidden");
+        }
+
+        Lobby lobby = this.gameService.startGame(id);
+
+        return ResponseEntity.ok(lobby);
     }
 
     @PutMapping("/{id}")
